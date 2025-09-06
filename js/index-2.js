@@ -10,12 +10,12 @@ var worldH = window.innerHeight;
 var engine;
 var render;
 
-// bodies
+// Los cuerpos
 var blocks = [];
 var walls = [];
 var ground;
 
-// DOM elements
+// Elementos del DOM
 var hBlocks = document.getElementsByClassName("anarchy");
 
 var pageWidth = 0;
@@ -116,6 +116,7 @@ function setup() {
 }
 
 function draw() {
+  //Por si lo quiero cambiar:
   // for(var i=0;i<boxes.length;i++){
   //   boxes[i].show();
   // }
@@ -143,3 +144,4 @@ draw();
   }
   window.requestAnimationFrame(render);
 })();
+
