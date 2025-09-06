@@ -64,7 +64,7 @@ let app = {
         },
       ];
 
-      // Runs callback
+        // Corre la respuesta
       app.charts.initialize();
     },
 
@@ -99,18 +99,18 @@ let app = {
         let width = parent.offsetWidth;
         let height = parent.offsetHeight;
 
-        // Initializes object to house all instances
+        // Se inicializa el objeto para q tenga todas las instancias del dom
         let instance = (app.instances[box] = {});
 
-        // Creates canvas
+        // Crea canvas
         instance.canvas = document.createElement("canvas");
-        instance.canvas.style.position = "absolute"; // makes canvas be rendered on top of unbounce’s overlay
+        instance.canvas.style.position = "absolute"; //Hace q el canvas se superponga sobre unbounce
         parent.appendChild(instance.canvas);
 
-        // Create engine
+        // Iniciamos el motor
         instance.engine = Engine.create();
 
-        // Creates renderer
+        // Crea renderizador
         instance.render = Render.create({
           canvas: instance.canvas,
           engine: instance.engine,
@@ -119,11 +119,11 @@ let app = {
             height: height,
             wireframes: false,
             background: "transparent",
-            pixelRatio: "auto", // Makes it crisp on retina
+            pixelRatio: "auto", // Hace q se vea jodidamente cul
           },
         });
 
-        // Creates walls
+        // Paredes y eso
         let entries = app.data.sheet.length;
         let thickness = (width * 12) / 100;
         let gap = (width - (entries + 1) * thickness) / entries;
@@ -144,7 +144,7 @@ let app = {
           }
         );
 
-        // Creates ground
+        // Piso
         let ground = Bodies.rectangle(
           (width * 1) / 3,
           height - thickness / 5,
@@ -160,7 +160,7 @@ let app = {
 
         Composite.add(instance.engine.world, [ground, walls]);
 
-        // Creates balls
+        // Bolas (meme mona de Tarzán)
         for (const [index, entry] of app.data.sheet.entries()) {
           let radius = (width * 2.1) / 100;
           let emitter = thickness * (index + 1) + gap * index + gap / 2;
@@ -178,20 +178,20 @@ let app = {
                   slop: 0,
                   frictionStatic: 1,
                   render: {
-                    //fillStyle : entry.color,
+                    //fillStyle : entry.color, -> lo guardo aqui por si quiero cambiarlo luego
                     fillStyle:
                       app.colors[Math.floor(Math.random() * app.colors.length)],
                   },
                 }
               );
 
-              // Adds balls to world
+              // Se dejan caer las pelotas sobre la pantalla (q rico bolas)
               Composite.add(instance.engine.world, [ball]);
             }, i * 90);
           }
         }
 
-        //Adds mouse control
+        //El switch ese
         let mouse = Mouse.create(instance.render.canvas);
         let mouseConstraint = MouseConstraint.create(instance.engine, {
           mouse: mouse,
@@ -205,16 +205,16 @@ let app = {
 
         Composite.add(instance.engine.world, mouseConstraint);
 
-        // Keeps mouse in sync with rendering
+        // Sincroniza el mouse con el renderizado
         instance.render.mouse = mouse;
 
-        // Runs renderer
+        // Corre el renderizado
         Render.run(instance.render);
 
-        // Creates runner
+        // Crea instncia para q corra
         instance.runner = Runner.create();
 
-        // Runs engine
+        // Corre el motor
         Runner.run(instance.runner, instance.engine);
       },
     },
@@ -226,7 +226,7 @@ let app = {
         let box = chart[0];
         let type = chart[1];
 
-        // Creates each chart
+        // cREA Cada chart
         app.charts[type].initialize(box);
       }
     },
@@ -235,13 +235,12 @@ let app = {
   events: {
     resize: () => {
       window.addEventListener("resize", () => {
-        // Sets width in which desktop and mobile versions are switched
+        // Lo q el pelón llamaria Responsive
         let threshold = 600;
 
-        // Initializes width when resize occurs for the first time
+
         if (app.data.width === undefined) app.data.width = window.innerWidth;
 
-        // Creates aliases
         let previous = app.data.width;
         let current = window.innerWidth;
 
@@ -249,16 +248,12 @@ let app = {
           (current <= threshold && previous > threshold) ||
           (current > threshold && previous <= threshold)
         ) {
-          // Handles switch between desktop and mobile versions
-
-          // Clears all charts
           app.charts.clear();
 
-          // Draws all charts again
           app.charts.initialize();
         }
 
-        // Updates width
+        // Actualiza el ancho
         app.data.width = window.innerWidth;
       });
     },
@@ -269,7 +264,6 @@ let app = {
   },
 
   initialize: (options) => {
-    // Creates module aliases
     window.Engine = Matter.Engine;
     window.Render = Matter.Render;
     window.Runner = Matter.Runner;
@@ -280,13 +274,12 @@ let app = {
     window.MouseConstraint = Matter.MouseConstraint;
     window.Common = Matter.Common;
 
-    // Sets options
+    // Pone opciones
     app.options = options;
 
-    // Loads dependencies
+    // LCarga las dependencias
     app.load.initialize();
 
-    // Attaches events
     app.events.initialize();
   },
 };
@@ -296,3 +289,4 @@ let options = {
 };
 
 app.initialize(options);
+
